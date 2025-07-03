@@ -6,6 +6,7 @@
 int main()
 {
     //Initialize
+    srand(time(NULL));
     Game game;
     game.renderStartScreen();
 

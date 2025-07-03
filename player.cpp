@@ -10,19 +10,39 @@ class Player
 protected:
     Vector2 position;
     Vector2 lastPosition;
-    string feedbackText;
+    string actionText;
+    string positionText;
     int steps;
+
+    void updatePositionText ()
+    {
+        positionText = concatenate("You are now at position x:", position.x, "; y:", position.y, " and made ", steps, " steps.\n");
+    }
     
 public:    
     Player (Vector2 pos = {0,0}) {
-        position.x = pos.x;
-        position.y = pos.y;
+        position = {pos.x, pos.y};
         lastPosition = position;
         steps = 0;
-        feedbackText = concatenate("You start at position x:", position.x, "; y:", position.y, ".");
+        actionText = concatenate("You start at position x:", position.x, "; y:", position.y, ".");
+        positionText = "";
+    };
+
+    Vector2 getPosition () const {return position;}
+    
+    Vector2 getLastPosition () const {return lastPosition;}
+
+    const string& getActionText() const
+    {
+        return actionText;
+    };
+
+    const string& getPositionText() const
+    {
+        return positionText;
     };
     
-    void doAction (const InputToken input) {
+    void doAction (const InputCommand input) {
         
         lastPosition = position;
         
@@ -30,7 +50,7 @@ public:
         {
             case MOVE_UP:
             {
-                feedbackText = "moved up";
+                actionText = "moved up";
                 position.y += 1;
                 ++steps;
                 break;
@@ -38,7 +58,7 @@ public:
             
             case MOVE_DOWN:
             {
-                feedbackText = "moved down";
+                actionText = "moved down";
                 position.y -= 1;
                 ++steps;
                 break;
@@ -46,7 +66,7 @@ public:
 
             case MOVE_LEFT:
             {
-                feedbackText = "moved left";
+                actionText = "moved left";
                 position.x -= 1;
                 ++steps;
                 break;
@@ -54,7 +74,7 @@ public:
 
             case MOVE_RIGHT:
             {
-                feedbackText = "moved right";
+                actionText = "moved right";
                 position.x += 1;
                 ++steps;
                 break;
@@ -62,22 +82,22 @@ public:
             
             case DO_NOTHING:
             {
-                feedbackText = "did nothing";
+                actionText = "did nothing";
                 break;
             };
 
             case TELEPORT:
             {
-                feedbackText = "were teleported";
+                actionText = "were teleported";
                 Vector2 newPosition = Vector2::getRandomVectorNearOverflow(5,10);
-                position = newPosition;
-                lastPosition = newPosition;
+                lastPosition = position = newPosition;
                 break;
             };
             
             case NO_INPUT:
             {
-                feedbackText = "What do you mean?";
+                actionText = "What do you mean?";
+                updatePositionText();
                 return;
             };
 
@@ -85,20 +105,7 @@ public:
                 return;
         }
 
-        feedbackText = "You " + feedbackText + ".";
+        actionText = "You " + actionText + ".";
+        updatePositionText();
     };
-
-    string getActionText()
-    {
-        return feedbackText + "\n";
-    };
-
-    string getPositionText()
-    {
-        return concatenate("You are now at position x:", position.x, "; y:", position.y, " and made ", steps, " steps.\n");
-    };
-
-    Vector2 getPosition () {return position;}
-    
-    Vector2 getLastPosition () {return lastPosition;}
 };

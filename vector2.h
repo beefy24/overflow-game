@@ -11,14 +11,14 @@ struct Vector2
 {
     short x {};
     short y {};
-    static Vector2 getRandomVector();
-    static Vector2 getRandomVectorNearOverflow(short distanceMin, short distanceMax);
+    
+    //inline - the call of this function will be replaced with the function's code.
+    static inline Vector2 getRandomVector();
+    static inline Vector2 getRandomVectorNearOverflow(short distanceMin, short distanceMax);
 };
 
 Vector2 Vector2::getRandomVector()
 {
-    srand(time(NULL));
-
     int sign = (rand() % 2) ? 1 : -1;
     short randomX = (rand() % (SHORT_INT_MAX + 1)) * sign;
 
@@ -30,8 +30,6 @@ Vector2 Vector2::getRandomVector()
 
 Vector2 Vector2::getRandomVectorNearOverflow (short distanceMin, short distanceMax)
 {
-    srand(time(NULL));
-
     Vector2 randomPosition = getRandomVector();
 
     int sign = (rand() % 2) ? 1 : -1;

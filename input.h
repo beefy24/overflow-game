@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum InputToken
+enum InputCommand
 {
     NO_INPUT,
     MOVE_UP,
@@ -20,7 +20,7 @@ enum InputToken
 };
 
 //All available user string inputs.
-constexpr pair<const char*, InputToken> TRANSLATION_TABLE[] = {
+constexpr pair<const char*, InputCommand> TRANSLATION_TABLE[] = {
     {"up", MOVE_UP},
     {"u", MOVE_UP},
     {"down", MOVE_DOWN},
@@ -43,7 +43,7 @@ constexpr pair<const char*, InputToken> TRANSLATION_TABLE[] = {
     {"quit", EXIT_GAME}
 };
 
-InputToken parseInputString (const string& input)
+InputCommand translateInputWord (const string& input)
 {
     for (const auto& x : TRANSLATION_TABLE)
     {

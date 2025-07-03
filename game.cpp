@@ -11,12 +11,11 @@ class Game
 {
 protected:
     Player player;
-    string rawInput;
-    InputToken input;
+    InputCommand inputCommand;
     bool winState;
     
     //Checks whether the player's position overflowed.
-    bool checkOverflow ()
+    bool checkOverflow () const
     { 
         short newValue;
         short oldValue;
@@ -40,47 +39,51 @@ protected:
 public:
     Game() : player(Vector2::getRandomVector())
     {
+        inputCommand = NO_INPUT;
         winState = false;
     }
 
-    bool getWinState () {return winState;}
+    InputCommand getCurrentInput () const {return inputCommand;}
+    
+    bool getWinState () const {return winState;}
 
-    InputToken getCurrentInput () {return input;}
-
+    //Takes a word from the input stream and translates it.
     void handleInput ()
     {
         print(": ");
         
+        string rawInput;
+
         cin >> rawInput;
 
-        input = parseInputString(rawInput);
+        inputCommand = translateInputWord(rawInput);
     }
 
     void updateGame ()
     {
-        player.doAction(input);
+        player.doAction(inputCommand);
         if (checkOverflow()) winState=true;
     }
 
     void renderGameScreen ()
     {   
-        system("clear");
-        if (input == GET_HELP) print("Help\n====\n", GameText::helpText);
-        print(player.getActionText());
+        clearScreen();
+        if (inputCommand == GET_HELP) printConcat("Help\n====\n", GameText::helpText , "\n\n");
+        printLn(player.getActionText());
         print(player.getPositionText());
-        if (winState == true) print (GameText::winText);
-        if (input == EXIT_GAME) print (GameText::exitText);
+        if (winState == true) printConcat (GameText::winText, "\n\n");
+        if (inputCommand == EXIT_GAME) printLn (GameText::exitText);
     }
 
     void renderStartScreen ()
     {
-        system("clear");
-        print(GameText::welcomeText);
+        clearScreen();
+        printConcat(GameText::welcomeText, "\n\n");
         print("Press enter to start.");
 
         flushInputStream(); //Wait for Enter, then flush the input stream.
         
-        system("clear");
-        print(player.getActionText());
+        clearScreen();
+        printLn(player.getActionText());
     }
 };
