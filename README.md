@@ -1,4 +1,4 @@
-### What is this?
+## What is this?
 This is a text-based walking game, and its sole purpose is to be a beginner learning exrecise in C++.
 The only goal in this game is to walk far enough so that one of the integers overflows.
 
